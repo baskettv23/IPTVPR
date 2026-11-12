@@ -43,10 +43,10 @@ data class UpdateInfo(
  */
 object AppUpdate {
     /** Built-in fallback address: the GitHub API of the latest release of the project. */
-    const val DEFAULT_URL = "https://api.github.com/repos/Emrodev/IPVIO-Stream/releases/latest"
+    const val DEFAULT_URL = "https://api.github.com/repos/baskettv23/IPVIO-Stream-ColorDebrid/releases/latest"
 
     /** Built-in primary address: `update.json` attached to the latest release (T-015). */
-    const val PRIMARY_URL = "https://github.com/Emrodev/IPVIO-Stream/releases/latest/download/update.json"
+    const val PRIMARY_URL = "https://github.com/baskettv23/IPVIO-Stream-ColorDebrid/releases/latest/download/update.json"
 
     /** Found update (for the bell), null = none known. */
     var available by mutableStateOf<UpdateInfo?>(null)
@@ -99,7 +99,7 @@ object AppUpdate {
 
     /** One request to [u]; returns null if the installed version is current. [strict] = the file must carry a SHA-256. */
     private fun fetch(c: Context, u: String, strict: Boolean): UpdateInfo? {
-        val req = Request.Builder().url(u).header("User-Agent", "IPVIO Stream")
+        val req = Request.Builder().url(u).header("User-Agent", "IPTVPR")
             .header("Accept", if (u == DEFAULT_URL) "application/vnd.github+json" else "application/json, application/vnd.github+json").build()
         return Net.base.newCall(req).execute().use { r ->
             if (r.code == 404) error("Noch keine Veröffentlichung gefunden")
@@ -202,7 +202,7 @@ object AppUpdate {
             val dir = File(c.cacheDir, "updates").apply { mkdirs(); listFiles()?.forEach { it.delete() } }
             val out = File(dir, "ipvio-update.apk")
             val client = Net.withTimeouts(15, 60)
-            client.newCall(Request.Builder().url(info.apkUrl).header("User-Agent", "IPVIO Stream").build()).execute().use { r ->
+            client.newCall(Request.Builder().url(info.apkUrl).header("User-Agent", "IPTVPR").build()).execute().use { r ->
                 if (!r.isSuccessful) error("Fehler ${r.code}")
                 val body = r.body ?: error("Leere Antwort")
                 val total = body.contentLength()

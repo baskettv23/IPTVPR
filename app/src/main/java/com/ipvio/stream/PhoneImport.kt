@@ -76,12 +76,12 @@ document.getElementById('$statusId').textContent='…';fetch('$path?code='+encod
     fun page(li: Int, feats: Features): String {
         fun t(a: String, b: String) = tr(li, a, b)
         return """<!doctype html><html lang="${I18nCore.CODES.getOrElse(li) { "en" }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IPVIO Stream</title><style>
+<title>IPTVPR</title><style>
 body{font-family:system-ui,sans-serif;background:#0B0F19;color:#fff;margin:0;padding:20px;max-width:560px}
 h1{font-size:22px}h2{font-size:16px;color:#9aa;margin-top:28px}
 input,textarea{width:100%;box-sizing:border-box;padding:14px;margin:6px 0;border-radius:10px;border:1px solid #333;background:#171a26;color:#fff;font-size:16px}
 button{width:100%;padding:14px;margin-top:10px;border:0;border-radius:10px;background:#4ADE80;color:#0B0F19;font-size:17px;font-weight:700}
-</style></head><body><h1>IPVIO Stream</h1>
+</style></head><body><h1>IPTVPR</h1>
 <p>${t("Sende deine Playlist an den Fernseher. Den Code siehst du auf dem Bildschirm.", "Send your playlist to the TV. You can see the code on the screen.")}</p>
 <form method="post" action="/send"><h2>${t("M3U-Link", "M3U link")}</h2>
 <input name="code" inputmode="numeric" maxlength="4" placeholder="${t("Code vom Fernseher", "Code from the TV")}" required>
@@ -114,7 +114,7 @@ button{width:100%;padding:14px;margin-top:10px;border:0;border-radius:10px;backg
     /** Transfer: download a backup (optionally with playlists) or restore a backup. */
     fun transferPage(li: Int): String {
         fun t(a: String, b: String) = tr(li, a, b)
-        return """<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IPVIO Stream</title><style>$CSS</style></head><body>
+        return """<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IPTVPR</title><style>$CSS</style></head><body>
 <h1>${t("Auf ein anderes Gerät übertragen", "Transfer to another device")}</h1>
 <p>${t("1. Auf dem alten Gerät die Sicherung herunterladen. 2. Auf dem neuen Gerät diese Seite öffnen und die Datei einspielen.", "1. Download the backup on the old device. 2. Open this page on the new device and upload the file.")}</p>
 <form method="get" action="/backup"><h2>${t("Sicherung herunterladen", "Download backup")}</h2>
@@ -138,7 +138,7 @@ button{width:100%;padding:14px;margin-top:10px;border:0;border-radius:10px;backg
             text.isBlank() -> "<p>" + t("Kein Absturz gespeichert.", "No crash saved.") + "</p>"
             else -> "<p>" + t("Text markieren und kopieren, z. B. für einen Fehlerbericht auf GitHub.", "Select and copy the text, e.g. for a bug report on GitHub.") + "</p><pre>$esc</pre>"
         }
-        return """<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IPVIO Stream</title><style>$CSS</style></head><body>
+        return """<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IPTVPR</title><style>$CSS</style></head><body>
 <h1>${t("Absturzbericht", "Crash report")}</h1>$body</body></html>"""
     }
 

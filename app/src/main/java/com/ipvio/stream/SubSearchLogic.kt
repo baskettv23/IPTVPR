@@ -17,7 +17,7 @@ object SubSearchLogic {
     const val SD_API = "https://api.subdl.com/api/v1/subtitles"
     const val SD_DL = "https://dl.subdl.com"
     /** OpenSubtitles requires an app name with version in the User-Agent. */
-    const val UA = "IPVIO v1.2"
+    const val UA = "IPTVPR v1.2"
 
     /** What is searched: TMDB ID (0 = unknown) or title/year; [season]/[episode] > 0 for an episode. */
     data class Query(val title: String, val year: Int?, val tmdbId: Int, val season: Int, val episode: Int, val langs: List<String>) {

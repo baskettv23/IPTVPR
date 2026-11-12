@@ -69,7 +69,7 @@ object RemoteLogic {
         val lang = I18nCore.CODES.getOrElse(li) { "en" }
         return """<!doctype html><html lang="$lang"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1220">
-<title>IPVIO Stream</title>
+<title>IPTVPR</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#0b1220;color:#fff;font:16px/1.35 system-ui,sans-serif;padding-bottom:150px}

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Rebrand: the app is now IPTVPR. New launcher icon, themed icon and in-app mark built around the Puerto Rico flag (T-027)
 - Design: colored accents on the detail page buttons, sidebar menu icons and filter pills (each menu entry and filter has its own hue; focus still turns the element white)
 - Streams: optional Real-Debrid and TorBox keys under Settings > API keys. A "Stream" button on movie pages resolves a magnet link or `.torrent` address that the user pastes in; there is no built-in search and no bundled source. Only use content you have the rights to (T-026)
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed icon: Puerto Rico star with a play cutout. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M54,24 L60.74,44.73 L82.53,44.73 L64.9,57.54 L71.63,78.27 L54,65.46 L36.37,78.27 L43.1,57.54 L25.47,44.73 L47.26,44.73 Z M47,42 L47,66 L67,54 Z" />
+</vector>

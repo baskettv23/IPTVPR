@@ -316,7 +316,7 @@ object Debrid {
     private fun json(body: String): JSONObject? = runCatching { JSONObject(body) }.getOrNull()
 
     private fun download(url: String): ByteArray? {
-        val r = http("GET", url, mapOf("User-Agent" to "IPVIO-Stream"))
+        val r = http("GET", url, mapOf("User-Agent" to "IPTVPR"))
         if (r.code !in 200..299) return null
         return r.raw?.takeIf { it.size in 1..5_000_000 }
     }

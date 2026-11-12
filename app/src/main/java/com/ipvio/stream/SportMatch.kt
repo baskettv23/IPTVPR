@@ -191,7 +191,7 @@ object SportMatch {
         if (hit != null && now - hit.first < 25_000) return@withContext hit.second
         try {
             val req = Request.Builder().url("https://site.api.espn.com/apis/site/v2/sports/${l.path}/summary?event=${g.id}")
-                .header("User-Agent", "IPVIO-Stream").build()
+                .header("User-Agent", "IPTVPR").build()
             Net.withTimeouts(8, 12).newCall(req).execute().use { r ->
                 if (!r.isSuccessful) return@withContext hit?.second
                 val d = parse(r.body?.string().orEmpty(), g)

@@ -476,7 +476,7 @@ internal fun BoomerPage(ctx: Context, onExit: () -> Unit) {
                 if (!granted) SmallPill("Einstellung öffnen") { openOverlaySettings(ctx) }
                 SmallPill("Prüfen", Modifier.focusRequester(firstReq)) { tick++; reportOverlayState(ctx) }
             }
-            Hint("Im Boomer Mode öffnet sich IPVIO Stream von selbst, sobald der Fernseher oder die Box eingeschaltet wird. Manche Geräte (z. B. einzelne Fire-TV-Modelle) blockieren das trotzdem.")
+            Hint("Im Boomer Mode öffnet sich IPTVPR von selbst, sobald der Fernseher oder die Box eingeschaltet wird. Manche Geräte (z. B. einzelne Fire-TV-Modelle) blockieren das trotzdem.")
 
             SectionTitle("Was der Bildschirm zeigt")
             BlockLayoutPage(
