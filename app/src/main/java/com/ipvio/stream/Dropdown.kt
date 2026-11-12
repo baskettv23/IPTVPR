@@ -34,14 +34,32 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
 
+private fun filterTint(icon: FIcon?): Color? = when (icon) {
+    FIcon.Sort -> Color(0xFF60A5FA)
+    FIcon.Rating -> Color(0xFFFBBF24)
+    FIcon.Year -> Color(0xFF34D399)
+    FIcon.Genre -> Color(0xFFC084FC)
+    FIcon.Country -> Color(0xFFFB7185)
+    FIcon.View -> Color(0xFF2DD4BF)
+    FIcon.Grid -> Color(0xFFF59E0B)
+    FIcon.Reset -> Color(0xFF94A3B8)
+    null -> null
+}
+
 @Composable
-fun FilterPill(text: String, active: Boolean, modifier: Modifier = Modifier, icon: FIcon? = null, caret: Boolean = false, aicon: AIcon? = null, raw: Boolean = false, onClick: () -> Unit) {
+fun FilterPill(text: String, active: Boolean, modifier: Modifier = Modifier, icon: FIcon? = null, caret: Boolean = false, aicon: AIcon? = null, raw: Boolean = false, tint: Color? = null, onClick: () -> Unit) {
     var f by remember { mutableStateOf(false) }
     val s by animateFloatAsState(if (f) focusScale(1.06f) else 1f, label = "fp")
     val shape = RoundedCornerShape(50)
+    val tc = tint ?: filterTint(icon)
     // Consistent with the buttons of the detail page (round 15): slightly transparent with a fine border, selection filled light
     val c = ButtonColors(
-        if (f) DS.FocusFill else if (active) Color(0x4DFFFFFF) else Color(0x33FFFFFF),
+        when {
+            f -> DS.FocusFill
+            active -> Color(0x4DFFFFFF)
+            tc != null -> tc.copy(alpha = .16f)
+            else -> Color(0x33FFFFFF)
+        },
         if (f) DS.FocusInk else Color.White
     )
     Box(
@@ -49,17 +67,27 @@ fun FilterPill(text: String, active: Boolean, modifier: Modifier = Modifier, ico
             .height(dpx(42))
             .clip(shape)
             .background(c.bg)
-            .border(1.dp, if (f) DS.FocusFill else if (active) Color(0xB3FFFFFF) else Color(0x40FFFFFF), shape)
+            .border(
+                1.dp,
+                when {
+                    f -> DS.FocusFill
+                    active -> Color(0xB3FFFFFF)
+                    tc != null -> tc.copy(alpha = .45f)
+                    else -> Color(0x40FFFFFF)
+                },
+                shape
+            )
             .onFocusChanged { f = it.isFocused }
             .clickable(onClick = onClick)
             .padding(horizontal = dpx(18)),
         contentAlignment = Alignment.Center
     ) {
+        val ink = if (f) DS.FocusInk else tc ?: c.text
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            if (icon != null) FilterIcon(icon, c.text, 20.dp)
-            if (aicon != null) AppIcon(aicon, c.text, size = 17.dp)
+            if (icon != null) FilterIcon(icon, ink, 20.dp)
+            if (aicon != null) AppIcon(aicon, ink, size = 17.dp)
             if (text.isNotEmpty()) Text(text, color = c.text, fontSize = spx(14.3f), fontWeight = FontWeight.SemiBold, maxLines = 1, raw = raw)
-            if (caret) AppIcon(AIcon.Caret, c.text, size = 16.dp)
+            if (caret) AppIcon(AIcon.Caret, ink, size = 16.dp)
         }
     }
 }
@@ -77,12 +105,12 @@ private val belowAnchor = object : PopupPositionProvider {
 @Composable
 fun DropdownPill(
     label: String, value: String, options: List<String>, selected: Int,
-    active: Boolean = false, modifier: Modifier = Modifier, icon: FIcon? = null, onPick: (Int) -> Unit
+    active: Boolean = false, modifier: Modifier = Modifier, icon: FIcon? = null, tint: Color? = null, onPick: (Int) -> Unit
 ) {
     var open by remember { mutableStateOf(false) }
     Box {
         // With icon: only icon + value (the setting's name is in the opened menu or recognizable from the icon)
-        FilterPill(if (icon != null) value else "$label: $value", active, modifier, icon, caret = true) { open = true }
+        FilterPill(if (icon != null) value else "$label: $value", active, modifier, icon, caret = true, tint = tint) { open = true }
         if (open) OptionPopup(options, selected, { open = false }) { onPick(it); open = false }
     }
 }

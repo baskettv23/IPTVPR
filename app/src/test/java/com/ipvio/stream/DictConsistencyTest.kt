@@ -10,7 +10,7 @@ class DictConsistencyTest {
 
     @Test fun placeholders_eindeutig_und_in_allen_sprachen() {
         val problems = ArrayList<String>()
-        for (block in listOf(DictA, DictB, DictC, DictD, DictE, DictF, DictG, DictH, DictI, DictJ, DictK, DictL, DictM, DictNl1, DictNl2, DictNl3, DictNl4, DictNl5, DictNl6)) {
+        for (block in listOf(DictA, DictB, DictC, DictD, DictE, DictF, DictG, DictH, DictI, DictJ, DictK, DictL, DictM, DictDebrid, DictNl1, DictNl2, DictNl3, DictNl4, DictNl5, DictNl6)) {
             for (line in block.lineSequence()) {
                 if (line.isBlank() || line.startsWith("#") || !line.contains('¦')) continue
                 val cols = line.split('¦')

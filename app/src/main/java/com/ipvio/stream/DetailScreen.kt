@@ -141,9 +141,11 @@ private fun DetailScreenFull(
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
     var heroFocused by remember { mutableStateOf(false) }
+    var debridOpen by remember(item.id) { mutableStateOf(false) }
     LaunchedEffect(heroFocused) {
         if (heroFocused) repeat(4) { delay(70); listState.scrollToItem(0) }
     }
+    if (debridOpen) DebridStreamDialog(item.title, { debridOpen = false }) { url -> onPlay(url, item.title, 0L) }
     BackHandler(enabled = !embedded, onBack = onBack)
     var meta by remember(item.id) { mutableStateOf(MetaRepo.cached(item)) }
     var metaDone by remember(item.id) { mutableStateOf(!MetaRepo.usable(item) || item.kind == Kind.LIVE) }
@@ -501,28 +503,29 @@ private fun DetailScreenFull(
                                         resume.next -> "Weiter mit " + (if (oneSeason) "Folge ${resumeSE.second}" else "S${resumeSE.first} · Folge ${resumeSE.second}")
                                         else -> "Fortsetzen · " + (if (oneSeason) "Folge ${resumeSE.second}" else "S${resumeSE.first} · Folge ${resumeSE.second}")
                                     }
-                                    HeroButton(label, AIcon.Play, true, Modifier.focusRequester(playFocus), bh) {
+                                    HeroButton(label, AIcon.Play, true, Modifier.focusRequester(playFocus), bh, tint = Color(0xFF4ADE80)) {
                                         // current address from the playlist (the stored one can be outdated after a refresh)
                                         val t = WatchStore.target(ctx, item, resume)
                                         onPlay(t.second, t.first, resume.pos)
                                     }
-                                    HeroButton("Von vorn", AIcon.Rewind, false, Modifier, bh) { playUrl?.let { onPlay(it, item.title + (if (item.kind == Kind.SERIES) " S" + season + "E" + (eps.firstOrNull()?.num ?: 1) else ""), 0L) } }
+                                    HeroButton("Von vorn", AIcon.Rewind, false, Modifier, bh, tint = Color(0xFF60A5FA)) { playUrl?.let { onPlay(it, item.title + (if (item.kind == Kind.SERIES) " S" + season + "E" + (eps.firstOrNull()?.num ?: 1) else ""), 0L) } }
                                 } else {
                                     // Watched movie: "Play again" instead of "Play"
                                     val seenMovie = item.kind == Kind.MOVIE && progress[ResumeLogic.key(0, 0)]?.done == true
-                                    HeroButton(if (seenMovie) "Erneut abspielen" else "Abspielen", if (seenMovie) AIcon.Rewind else AIcon.Play, true, Modifier.focusRequester(playFocus), bh) {
+                                    HeroButton(if (seenMovie) "Erneut abspielen" else "Abspielen", if (seenMovie) AIcon.Rewind else AIcon.Play, true, Modifier.focusRequester(playFocus), bh, tint = Color(0xFF4ADE80)) {
                                         playUrl?.let { onPlay(it, item.title + (if (item.kind == Kind.SERIES) " S" + season + "E" + (eps.firstOrNull()?.num ?: 1) else ""), 0L) }
                                     }
                                 }
                             }
                             Row(horizontalArrangement = Arrangement.spacedBy(dpx(12))) {
                                 val inList = Library.isWatch(item.id)
-                                HeroButton(if (inList) "In Meiner Liste" else "Meine Liste", if (inList) AIcon.Check else AIcon.Plus, false, Modifier, bh) { Library.toggleWatch(ctx, item.id) }
+                                HeroButton(if (inList) "In Meiner Liste" else "Meine Liste", if (inList) AIcon.Check else AIcon.Plus, false, Modifier, bh, tint = Color(0xFF2DD4BF)) { Library.toggleWatch(ctx, item.id) }
                                 // Round 14: movies and series as favorites (appear under "Favorites")
                                 val fav = Library.isFav(item.id)
-                                HeroButton(if (fav) "Favorit" else "Zu Favoriten", if (fav) AIcon.HeartFilled else AIcon.Heart, false, Modifier, bh) { Library.toggleFav(ctx, item.id) }
-                                HeroButton("Trailer", AIcon.Play, false, Modifier, bh) { openTrailer(ctx, meta?.trailerKey, item.title) }
-                                HeroButton("Extern", AIcon.External, false, Modifier, bh) { playUrl?.let { openExternal(ctx, it, item.title) } }
+                                HeroButton(if (fav) "Favorit" else "Zu Favoriten", if (fav) AIcon.HeartFilled else AIcon.Heart, false, Modifier, bh, tint = Color(0xFFFB7185)) { Library.toggleFav(ctx, item.id) }
+                                HeroButton("Trailer", AIcon.Play, false, Modifier, bh, tint = Color(0xFFF87171)) { openTrailer(ctx, meta?.trailerKey, item.title) }
+                                HeroButton("Extern", AIcon.External, false, Modifier, bh, tint = Color(0xFFC084FC)) { playUrl?.let { openExternal(ctx, it, item.title) } }
+                                if (item.kind == Kind.MOVIE) HeroButton("Stream", AIcon.Download, false, Modifier, bh, tint = Color(0xFFFFA726)) { debridOpen = true }
                             }
                             // Watched by hand: movie, season, whole series (also reachable per episode: long OK / menu key on the row)
                             Row(horizontalArrangement = Arrangement.spacedBy(dpx(12))) {
@@ -535,7 +538,7 @@ private fun DetailScreenFull(
                                 if (item.kind == Kind.SERIES) {
                                     val seasonKeys = eps.map { ResumeLogic.key(it.season, it.num) }
                                     val seasonSeen = seasonKeys.isNotEmpty() && seasonKeys.all { progress[it]?.done == true }
-                                    HeroButton(if (seasonSeen) "Staffel zurücksetzen" else "Staffel gesehen", if (seasonSeen) AIcon.Rewind else AIcon.Check, false, Modifier, bh) {
+                                    HeroButton(if (seasonSeen) "Staffel zurücksetzen" else "Staffel gesehen", if (seasonSeen) AIcon.Rewind else AIcon.Check, false, Modifier, bh, tint = Color(0xFF38BDF8)) {
                                         EpProgress.mark(ctx, item.id, seasonKeys, !seasonSeen)
                                         if (!seasonSeen) dropResume(seasonKeys)
                                         progVer++
@@ -543,7 +546,7 @@ private fun DetailScreenFull(
                                     if (seasons.size > 1) {
                                         val allKeys = item.episodes.map { ResumeLogic.key(it.season, it.num) }
                                         val allSeen = allKeys.isNotEmpty() && allKeys.all { progress[it]?.done == true }
-                                        HeroButton(if (allSeen) "Serie zurücksetzen" else "Serie gesehen", if (allSeen) AIcon.Rewind else AIcon.Check, false, Modifier, bh) {
+                                        HeroButton(if (allSeen) "Serie zurücksetzen" else "Serie gesehen", if (allSeen) AIcon.Rewind else AIcon.Check, false, Modifier, bh, tint = Color(0xFF38BDF8)) {
                                             EpProgress.mark(ctx, item.id, allKeys, !allSeen)
                                             if (!allSeen) dropResume(allKeys)
                                             progVer++
@@ -552,14 +555,14 @@ private fun DetailScreenFull(
                                 } else if (item.kind == Kind.MOVIE) {
                                     val k = ResumeLogic.key(0, 0)
                                     val seen = progress[k]?.done == true
-                                    HeroButton(if (seen) "Als ungesehen markieren" else "Als gesehen markieren", if (seen) AIcon.Rewind else AIcon.Check, false, Modifier, bh) {
+                                    HeroButton(if (seen) "Als ungesehen markieren" else "Als gesehen markieren", if (seen) AIcon.Rewind else AIcon.Check, false, Modifier, bh, tint = Color(0xFF34D399)) {
                                         EpProgress.mark(ctx, item.id, listOf(k), !seen)
                                         if (!seen) dropResume(listOf(k))
                                         progVer++
                                     }
                                 }
                                 if (item.id in History.ids) {
-                                    HeroButton("Aus „Zuletzt geschaut“ entfernen", AIcon.Close, false, Modifier, bh) { History.remove(ctx, item.id) }
+                                    HeroButton("Aus „Zuletzt geschaut“ entfernen", AIcon.Close, false, Modifier, bh, tint = Color(0xFF94A3B8)) { History.remove(ctx, item.id) }
                                 }
                             }
                         }

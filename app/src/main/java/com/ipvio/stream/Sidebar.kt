@@ -141,6 +141,11 @@ fun MenuIcon(id: Int, color: Color, modifier: Modifier = Modifier) {
 private val SidebarBg: Color get() = lerp(Look.bg, Color.Black, 0.25f)
 private val SidebarInk = Color(0xFFCFCFD6)
 
+fun menuColor(id: Int): Color {
+    val h = (id * 360f / MenuLogic.COUNT + 12f) % 360f
+    return Color.hsv(h, 0.55f, 1f)
+}
+
 /** Position and style of the sidebar (round 20): left, right or top; icons only or always with text. */
 object SidebarPrefs {
     const val LEFT = 0
@@ -289,7 +294,7 @@ fun Sidebar(tab: Int, onTab: (Int) -> Unit, modifier: Modifier, activeFocus: Foc
 private fun PhoneSearchItem(expanded: Boolean, modifier: Modifier, horizontal: Boolean = false) {
     var f by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(dpx(12))
-    val ink = if (f) DS.FocusInk else if (RemoteHub.active) Accent1 else SidebarInk
+    val ink = if (f) DS.FocusInk else if (RemoteHub.active) Accent1 else Color(0xFF38BDF8)
     Row(
         (if (horizontal) modifier.height(dpx(48)) else modifier.fillMaxWidth().height(dpx(56))).clip(shape)
             .background(if (f) SolidColor(DS.FocusFill) else SolidColor(Color.Transparent))
@@ -312,13 +317,14 @@ private fun SideItem(id: Int, label: String, active: Boolean, expanded: Boolean,
     var fRaw by remember { mutableStateOf(false) }
     val f = fRaw && !ViewLive.active
     val shape = RoundedCornerShape(dpx(12))
-    // Active: icon in the design color on a tinted surface. Focus: white surface, dark text (clearly "selected").
-    val ink = if (f) DS.FocusInk else if (active) Accent1 else SidebarInk
+    // Active: icon in its own color on a tinted surface. Focus: white surface, dark text (clearly "selected").
+    val mc = menuColor(id)
+    val ink = if (f) DS.FocusInk else mc
     Row(
         (if (horizontal) modifier.height(dpx(48)) else modifier.fillMaxWidth().height(dpx(56))).clip(shape)
             .background(
                 if (f) SolidColor(DS.FocusFill)
-                else if (active) SolidColor(Accent1.copy(alpha = .16f))
+                else if (active) SolidColor(mc.copy(alpha = .18f))
                 else SolidColor(Color.Transparent)
             )
             .onFocusChanged { fRaw = it.isFocused }

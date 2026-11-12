@@ -47,6 +47,7 @@ class MainActivity : ComponentActivity() {
         SidebarPrefs.init(this)
         Config.init(this)
         Config.initSubs(this)
+        DebridPrefs.init(this)
         LiveSettings.init(this)
         Recorder.attach(this)
         MobilePrefs.apply(this)

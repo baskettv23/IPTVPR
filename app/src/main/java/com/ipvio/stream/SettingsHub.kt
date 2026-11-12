@@ -1345,6 +1345,7 @@ private fun ProfilesPage(ctx: Context, onExit: () -> Unit) {
 @Composable
 private fun ApiKeysPage(ctx: Context) {
     val scope = rememberCoroutineScope()
+    DebridPrefs.init(ctx)
     var tmdb by remember { mutableStateOf(Config.ownTmdb(ctx)) }
     var omdb by remember { mutableStateOf(Config.ownOmdb(ctx)) }
     var tmdbStatus by remember { mutableStateOf("") }
@@ -1353,6 +1354,10 @@ private fun ApiKeysPage(ctx: Context) {
     var sdKey by remember { mutableStateOf(Config.SD_KEY) }
     var osStatus by remember { mutableStateOf("") }
     var sdStatus by remember { mutableStateOf("") }
+    var rdKey by remember { mutableStateOf(DebridPrefs.realDebrid) }
+    var tbKey by remember { mutableStateOf(DebridPrefs.torBox) }
+    var rdStatus by remember { mutableStateOf("") }
+    var tbStatus by remember { mutableStateOf("") }
     var busy by remember { mutableStateOf(false) }
     Hint("Die App enthält keine eigenen Schlüssel. Mit deinen eigenen, kostenlosen Schlüsseln zeigt sie Poster, Beschreibungen, Besetzung, Trailer, automatische Genres sowie IMDb- und Rotten-Tomatoes-Wertungen. Ohne Schlüssel übernimmt sie Beschreibung, Cover und Bewertung von deinem Anbieter (bei Xtream-Zugängen).")
 
@@ -1374,6 +1379,15 @@ private fun ApiKeysPage(ctx: Context) {
     Hint("Kostenlos unter subdl.com > Konto > API. Im Player unter „Audio & Untertitel“ > „Untertitel online suchen“ werden beide Dienste gefragt.")
     if (sdStatus.isNotBlank()) Text(sdStatus, color = if (sdStatus == "Schlüssel gültig") Accent2 else Muted, fontSize = 16.sp)
 
+    SectionTitle("Debrid (Streams)")
+    Field(rdKey, { rdKey = it; rdStatus = "" }, "Real-Debrid API-Token")
+    Hint("Kostenlos unter real-debrid.com: Konto anlegen, dann unter „API“ den privaten Token kopieren. Damit lassen sich eigene Magnet- oder Torrent-Links im Player abspielen.")
+    if (rdStatus.isNotBlank()) Text(rdStatus, color = if (rdStatus == "Schlüssel gültig") Accent2 else Muted, fontSize = 16.sp)
+    Field(tbKey, { tbKey = it; tbStatus = "" }, "TorBox API-Schlüssel")
+    Hint("Kostenlos unter torbox.app: Konto anlegen, dann unter „Einstellungen > API“ den API-Schlüssel kopieren. Damit lassen sich eigene Magnet- oder Torrent-Links im Player abspielen.")
+    if (tbStatus.isNotBlank()) Text(tbStatus, color = if (tbStatus == "Schlüssel gültig") Accent2 else Muted, fontSize = 16.sp)
+    Hint("Die Debrid-Schlüssel bleiben nur auf diesem Gerät. Der Stream-Button auf der Filmseite löst nur Links auf, die du selbst einfügst.")
+
     Hint("Die Schlüssel bleiben nur auf diesem Gerät. Nach dem Eintragen die App einmal neu starten, damit alle Bereiche die Infos laden. Intro- und Abspann-Zeiten kommen von TheIntroDB und brauchen keinen Schlüssel.")
     // Buttons last: text below the last focusable element was cut off at the bottom of the page
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -1382,18 +1396,23 @@ private fun ApiKeysPage(ctx: Context) {
             busy = true
             Config.save(ctx, tmdb, omdb)
             Config.saveSubs(ctx, osKey, sdKey)
+            DebridPrefs.save(ctx, rdKey, tbKey)
             tmdb = Config.ownTmdb(ctx); omdb = Config.ownOmdb(ctx); osKey = Config.OS_KEY; sdKey = Config.SD_KEY
+            rdKey = DebridPrefs.realDebrid; tbKey = DebridPrefs.torBox
             scope.launch {
                 tmdbStatus = if (tmdb.isEmpty()) "" else KeyCheck.tmdb(tmdb) ?: "Schlüssel gültig"
                 omdbStatus = if (omdb.isEmpty()) "" else KeyCheck.omdb(omdb) ?: "Schlüssel gültig"
                 osStatus = if (osKey.isEmpty()) "" else KeyCheck.openSubtitles(osKey) ?: "Schlüssel gültig"
                 sdStatus = if (sdKey.isEmpty()) "" else KeyCheck.subdl(sdKey) ?: "Schlüssel gültig"
+                rdStatus = if (rdKey.isEmpty()) "" else Debrid.check(DebridService.REAL_DEBRID, rdKey) ?: "Schlüssel gültig"
+                tbStatus = if (tbKey.isEmpty()) "" else Debrid.check(DebridService.TORBOX, tbKey) ?: "Schlüssel gültig"
                 busy = false
             }
         }
-        if (tmdb.isNotEmpty() || omdb.isNotEmpty() || osKey.isNotEmpty() || sdKey.isNotEmpty()) ConfirmPill("Schlüssel entfernen") {
+        if (tmdb.isNotEmpty() || omdb.isNotEmpty() || osKey.isNotEmpty() || sdKey.isNotEmpty() || rdKey.isNotEmpty() || tbKey.isNotEmpty()) ConfirmPill("Schlüssel entfernen") {
             tmdb = ""; omdb = ""; tmdbStatus = ""; omdbStatus = ""; Config.save(ctx, "", "")
             osKey = ""; sdKey = ""; osStatus = ""; sdStatus = ""; Config.saveSubs(ctx, "", "")
+            rdKey = ""; tbKey = ""; rdStatus = ""; tbStatus = ""; DebridPrefs.save(ctx, "", "")
         }
     }
 }

@@ -193,16 +193,17 @@ fun rememberFullMeta(item: Item, base: Meta?, enabled: Boolean = true): Meta? {
  * only the selected button is filled (white, dark text). Before, "Watch now" was always colored and looked selected.
  */
 @Composable
-fun HeroButton(text: String, icon: AIcon, primary: Boolean, modifier: Modifier = Modifier, h: Int = 50, onClick: () -> Unit) {
+fun HeroButton(text: String, icon: AIcon, primary: Boolean, modifier: Modifier = Modifier, h: Int = 50, tint: Color? = null, onClick: () -> Unit) {
     var f by remember { mutableStateOf(false) }
     val pulse = rememberPulse()
     val s by animateFloatAsState(if (f) focusScale(1.06f) else 1f, label = "herobtn")
     val shape = RoundedCornerShape(50)
     val ink = if (f) DS.FocusInk else Color.White
+    val accent = tint ?: if (primary) Accent1 else Color.White
     Row(
         modifier.graphicsLayer { val k = s * pulse.scale; scaleX = k; scaleY = k }.height(dpx(h)).clip(shape)
-            .background(if (f) DS.FocusFill else Color(0x33FFFFFF))
-            .border(1.dp, if (f) DS.FocusFill else Color(0x40FFFFFF), shape)
+            .background(if (f) DS.FocusFill else tint?.copy(alpha = .18f) ?: Color(0x33FFFFFF))
+            .border(1.dp, if (f) DS.FocusFill else tint?.copy(alpha = .55f) ?: Color(0x40FFFFFF), shape)
             .onFocusChanged { f = it.isFocused }
             .trackFocus()
             .clickable(onClick = { pulse.pulse(); onClick() })
@@ -210,7 +211,7 @@ fun HeroButton(text: String, icon: AIcon, primary: Boolean, modifier: Modifier =
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(dpx(h * 0.28f))
     ) {
-        AppIcon(icon, if (f) DS.FocusInk else if (primary) Accent1 else Color.White, size = dpx(h * 0.4f))
+        AppIcon(icon, if (f) DS.FocusInk else accent, size = dpx(h * 0.4f))
         Text(text, color = ink, fontSize = spx(h * 0.34f), fontWeight = FontWeight.SemiBold, maxLines = 1)
     }
 }
