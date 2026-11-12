@@ -126,7 +126,7 @@ object Debrid {
 
     private fun auth(key: String) = mapOf("Authorization" to "Bearer $key")
 
-    private fun realDebrid(key: String, link: String, onStatus: (String) -> Unit): DebridResult {
+    private suspend fun realDebrid(key: String, link: String, onStatus: (String) -> Unit): DebridResult {
         onStatus("Wird zu Real-Debrid hinzugefügt …")
         val add = if (link.startsWith("magnet:", true)) {
             http("POST", "$RD/torrents/addMagnet", auth(key), FormBody.Builder().add("magnet", link).build())
@@ -182,7 +182,7 @@ object Debrid {
         return json(r.body)?.let { s(it, "download") }?.takeIf { it.startsWith("http") }
     }
 
-    private fun torBox(key: String, link: String, onStatus: (String) -> Unit): DebridResult {
+    private suspend fun torBox(key: String, link: String, onStatus: (String) -> Unit): DebridResult {
         onStatus("Wird zu TorBox hinzugefügt …")
         val create = if (link.startsWith("magnet:", true)) {
             http(
