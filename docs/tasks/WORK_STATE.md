@@ -2,7 +2,7 @@ Last update: 2026-11-12 (release 1.4 prepared). Read `CLAUDE.md` first, then thi
 
 ## Current task
 
-T-027 (IPTVPR branding): app label and visible texts renamed, new launcher icon, themed icon and in-app mark based on the Puerto Rico flag. Task file: `docs/tasks/T-027-iptvpr-branding.md`. Not device tested locally; GitHub Actions debug build pending.
+T-027 (IPTVPR branding): app label and visible texts renamed, new launcher icon, themed icon and in-app mark based on the Puerto Rico flag. Task file: `docs/tasks/T-027-iptvpr-branding.md`. GitHub Actions debug build passed (run 43299203509); not device tested locally.
 
 T-026 (colorful UI + user-provided debrid streams): new `Debrid.kt`, `DebridDialog.kt`, `DictDebrid.kt`, tint parameters on `HeroButton`/`FilterPill`/`DropdownPill`, colored sidebar icons, debrid fields in Settings > API keys. Task file: `docs/tasks/T-026-colorful-ui-debrid.md`. Not compiled or device tested locally; GitHub Actions debug build pending. The release notes below are unchanged.
 
