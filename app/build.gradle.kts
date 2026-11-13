@@ -37,8 +37,8 @@ android {
         targetSdk = 37
         // Raise both for every release; the GitHub release tag must match versionName (e.g. tag "v1.1").
         // Can be overridden from CI with -PVERSION_CODE=... -PVERSION_NAME=...
-        versionCode = (rootProject.properties["VERSION_CODE"]?.toInteger() ?: 6)
-        versionName = rootProject.properties["VERSION_NAME"] ?: "1.4.1"
+        versionCode = (rootProject.properties["VERSION_CODE"]?.toString()?.toInt() ?: 6)
+        versionName = rootProject.properties["VERSION_NAME"]?.toString() ?: "1.4.1"
         // Name under the icon; the debug build overrides it (see buildTypes)
         manifestPlaceholders["appLabel"] = "IPTVPR"
 
