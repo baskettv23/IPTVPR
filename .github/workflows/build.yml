@@ -21,6 +21,19 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
+      - name: Set up stable signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          STORE_TYPE: ${{ secrets.SIGNING_STORE_TYPE }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            printf '%s' "$KEYSTORE_BASE64" | base64 -d > keystore.p12
+            printf 'storeFile=keystore.p12\nstorePassword=%s\nkeyAlias=%s\nkeyPassword=%s\nstoreType=%s\n' \
+              "$STORE_PASSWORD" "$KEY_ALIAS" "$KEY_PASSWORD" "$STORE_TYPE" > keystore.properties
+          fi
       - name: Set version from CI run
         run: |
           echo "VERSION_CODE=$((6 + ${GITHUB_RUN_NUMBER}))" >> $GITHUB_ENV

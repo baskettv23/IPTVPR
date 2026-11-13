@@ -54,6 +54,7 @@ android {
             storePassword = keystore.getProperty("storePassword")
             keyAlias = keystore.getProperty("keyAlias")
             keyPassword = keystore.getProperty("keyPassword")
+            storeType = keystore.getProperty("storeType") ?: "JKS"
         }
     }
 
@@ -63,6 +64,8 @@ android {
         debug {
             applicationIdSuffix = ".test"
             manifestPlaceholders["appLabel"] = "IPTVPR"
+            // Sign debug builds with the same key as releases so in-app updates work across CI runs.
+            if (hasKeystore) signingConfig = signingConfigs.getByName("release")
         }
         release {
             if (hasKeystore) signingConfig = signingConfigs.getByName("release")

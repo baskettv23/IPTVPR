@@ -1,9 +1,26 @@
 # Releasing a new version
 
-IPVIO Stream checks the latest GitHub release once a day and offers the update in the bell at the top right.
-It reads `update.json`, a small file you attach to every release (section 3). Without that file it falls back to the GitHub API.
+IPTVPR checks the latest GitHub release once a day and offers the update in the bell at the top right.
+It reads `update.json`, a small file attached to every release (section 3). Without that file it falls back to the GitHub API.
 Android installs an update **over** the old app (and keeps playlists, favorites, history and settings) only if
 both APKs are signed with **the same key**. Lose the key and every user has to uninstall and start from scratch.
+
+## 0. Automated releases (current setup)
+
+Every push to `main` runs `.github/workflows/build.yml` and:
+
+1. derives `versionCode` and `versionName` from the Actions run number,
+2. builds and signs `IPTVPR.apk`,
+3. writes `update.json` with the SHA-256,
+4. publishes a GitHub release tagged `v<versionName>` with both files.
+
+The signing key is a PKCS#12 file stored only in the repository secrets
+`SIGNING_KEYSTORE_BASE64`, `SIGNING_STORE_PASSWORD`, `SIGNING_KEY_ALIAS`,
+`SIGNING_KEY_PASSWORD`, `SIGNING_STORE_TYPE`. A local backup is in `~/.iptvpr-signing/`.
+The debug build uses the same key, so updates work across CI runs.
+
+If the signing key changes, users must uninstall the old app once. After that, pushes to `main`
+create newer `versionCode` values and the in-app updater installs them over the existing app.
 
 ## 1. One-time: the signing key
 

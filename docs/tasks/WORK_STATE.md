@@ -2,6 +2,8 @@ Last update: 2026-11-12 (release 1.4 prepared). Read `CLAUDE.md` first, then thi
 
 ## Current task
 
+T-028 (automatic IPTVPR releases + stable signing): repo renamed to `baskettv23/IPTVPR`; every push to `main` builds `IPTVPR.apk`, writes `update.json` and publishes a GitHub release. Debug/release builds share a stable PKCS#12 key stored in repository secrets. Task file: `docs/tasks/T-028-auto-release-signing.md`. First install after the key change needs one uninstall of the old `.test` app; after that in-app updates work.
+
 T-027 (IPTVPR branding): app label and visible texts renamed, new launcher icon, themed icon and in-app mark based on the Puerto Rico flag. Task file: `docs/tasks/T-027-iptvpr-branding.md`. GitHub Actions debug build passed (run 43299203509); not device tested locally.
 
 T-026 (colorful UI + user-provided debrid streams): new `Debrid.kt`, `DebridDialog.kt`, `DictDebrid.kt`, tint parameters on `HeroButton`/`FilterPill`/`DropdownPill`, colored sidebar icons, debrid fields in Settings > API keys. Task file: `docs/tasks/T-026-colorful-ui-debrid.md`. Not compiled or device tested locally; GitHub Actions debug build pending. The release notes below are unchanged.
