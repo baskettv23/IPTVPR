@@ -57,6 +57,8 @@ jobs:
           name: iptvpr-debug
           path: IPTVPR.apk
       - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           NOTES=$(git log -1 --pretty=%s)
           gh release delete "v${VERSION_NAME}" -y 2>/dev/null || true
