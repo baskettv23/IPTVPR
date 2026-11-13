@@ -44,12 +44,12 @@ jobs:
             "apk": "IPTVPR.apk",
             "sha256": os.environ["APK_SHA256"],
             "minSupportedCode": 0,
-            "mandatory": false,
+            "mandatory": False,
             "notes": notes
           }
           with open("update.json", "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
-          f.write("\n")
+            f.write("\n")
           PY
       - name: Upload artifact
         uses: actions/upload-artifact@v4
