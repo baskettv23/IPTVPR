@@ -66,7 +66,7 @@ CI on PR #59 (`testDebugUnitTest` and `assembleDebug`): success, so the Android 
 
 Phone and Fire TV (use a release-signed build with a lower `versionCode` as the installed app, for example 1.3 / code 4; publish a test release with a higher code):
 
-1. **Normal path:** release `v1.4-test` as a normal release (not pre-release) with `IPVIO-Stream.apk` and a correct `update.json`. Open the app, Settings > App update > "Jetzt nach Update suchen". Expect "Neu: Version …". Tap "Herunterladen und installieren": progress, then Android's installer. Install; playlists and settings must still be there.
+1. **Normal path:** release `v1.4-test` as a normal release (not pre-release) with `IPTVPR.apk` and a correct `update.json`. Open the app, Settings > App update > "Jetzt nach Update suchen". Expect "Neu: Version …". Tap "Herunterladen und installieren": progress, then Android's installer. Install; playlists and settings must still be there.
 2. **Wrong hash:** change one character of `sha256` in `update.json` (replace the asset). Expect "Prüfsumme stimmt nicht …"; no installer.
 3. **Wrong versionCode:** `versionCode` in `update.json` one higher than the APK's. Expect "Die Versionsnummer passt nicht zur Update-Datei."
 4. **Foreign signature:** attach a debug-signed APK with a higher code (and its correct hash). Expect "Die Signatur passt nicht zur installierten App …".

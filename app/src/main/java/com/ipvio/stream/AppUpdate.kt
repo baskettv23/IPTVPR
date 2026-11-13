@@ -43,10 +43,10 @@ data class UpdateInfo(
  */
 object AppUpdate {
     /** Built-in fallback address: the GitHub API of the latest release of the project. */
-    const val DEFAULT_URL = "https://api.github.com/repos/baskettv23/IPVIO-Stream-ColorDebrid/releases/latest"
+    const val DEFAULT_URL = "https://api.github.com/repos/baskettv23/IPTVPR/releases/latest"
 
     /** Built-in primary address: `update.json` attached to the latest release (T-015). */
-    const val PRIMARY_URL = "https://github.com/baskettv23/IPVIO-Stream-ColorDebrid/releases/latest/download/update.json"
+    const val PRIMARY_URL = "https://github.com/baskettv23/IPTVPR/releases/latest/download/update.json"
 
     /** Found update (for the bell), null = none known. */
     var available by mutableStateOf<UpdateInfo?>(null)

@@ -10,11 +10,11 @@ A free, open-source IPTV player for **Android TV, Google TV and Amazon Fire TV**
 
 ## Install
 
-**Download:** [IPVIO-Stream.apk (latest release)](https://github.com/Emrodev/IPVIO-Stream/releases/latest/download/IPVIO-Stream.apk)
+**Download:** [IPTVPR.apk (latest release)](https://github.com/baskettv23/IPTVPR/releases/latest/download/IPTVPR.apk)
 
 **Fire TV / Android TV with the Downloader app:** enter
 ```
-https://github.com/Emrodev/IPVIO-Stream/releases/latest/download/IPVIO-Stream.apk
+https://github.com/baskettv23/IPTVPR/releases/latest/download/IPTVPR.apk
 ```
 Allow "Install unknown apps" for Downloader (or your file manager) when asked, then install. No account or registration needed.
 

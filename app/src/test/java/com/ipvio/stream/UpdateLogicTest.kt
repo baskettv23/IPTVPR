@@ -13,7 +13,7 @@ class UpdateLogicTest {
     private val sha = "a".repeat(32) + "0123456789abcdef" + "B".repeat(16)
 
     private fun json(vararg extra: String): JSONObject {
-        val base = """"versionCode": 5, "versionName": "1.4", "apk": "IPVIO-Stream.apk""""
+        val base = """"versionCode": 5, "versionName": "1.4", "apk": "IPTVPR.apk""""
         return JSONObject("{" + (listOf(base) + extra.toList()).joinToString(",") + "}")
     }
 
@@ -25,7 +25,7 @@ class UpdateLogicTest {
         val m = UpdateLogic.parseManifest(
             json(""""sha256": "$sha"""", """"minSupportedCode": 3""", """"mandatory": true""", """"notes": "What is new""""), strict = true
         )
-        assertEquals(5L, m.code); assertEquals("1.4", m.name); assertEquals("IPVIO-Stream.apk", m.apk)
+        assertEquals(5L, m.code); assertEquals("1.4", m.name); assertEquals("IPTVPR.apk", m.apk)
         assertEquals(sha.lowercase(), m.sha256); assertEquals(3L, m.minSupportedCode)
         assertTrue(m.mandatory); assertEquals("What is new", m.notes)
     }
@@ -119,7 +119,7 @@ class UpdateLogicTest {
     }
 
     @Test fun apk_adresse_relativ_zur_release_url() {
-        val base = "https://github.com/Emrodev/IPVIO-Stream/releases/latest/download/update.json"
-        assertEquals("https://github.com/Emrodev/IPVIO-Stream/releases/latest/download/IPVIO-Stream.apk", UpdateLogic.resolve(base, "IPVIO-Stream.apk"))
+        val base = "https://github.com/baskettv23/IPTVPR/releases/latest/download/update.json"
+        assertEquals("https://github.com/baskettv23/IPTVPR/releases/latest/download/IPTVPR.apk", UpdateLogic.resolve(base, "IPTVPR.apk"))
     }
 }

@@ -28,7 +28,7 @@ A circular navy badge with a gold ring and a cyan inner ring. Inside, the Puerto
 - The launcher shows the name **IPTVPR** and the new icon.
 - The in-app brand mark (sidebar, loading screen, add-playlist header) uses the new artwork.
 - The About page and the main branding texts say IPTVPR.
-- The update check points to `baskettv23/IPVIO-Stream-ColorDebrid`, not the upstream project.
+- The update check points to `baskettv23/IPTVPR`, not the upstream project.
 - Existing storage keys, package name and user data are unchanged.
 
 ## Risks

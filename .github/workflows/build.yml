@@ -6,6 +6,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,11 +21,46 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
+      - name: Set version from CI run
+        run: |
+          echo "VERSION_CODE=$((6 + ${GITHUB_RUN_NUMBER}))" >> $GITHUB_ENV
+          echo "VERSION_NAME=1.4.${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
       - name: Unit tests
         run: ./gradlew --no-daemon testDebugUnitTest
       - name: Build debug APK
-        run: ./gradlew --no-daemon assembleDebug
-      - uses: actions/upload-artifact@v4
+        run: ./gradlew --no-daemon assembleDebug -PVERSION_CODE=${VERSION_CODE} -PVERSION_NAME=${VERSION_NAME}
+      - name: Rename APK to IPTVPR.apk
+        run: mv app/build/outputs/apk/debug/app-debug.apk IPTVPR.apk
+      - name: Compute APK SHA-256
+        run: echo "APK_SHA256=$(sha256sum IPTVPR.apk | awk '{print $1}')" >> $GITHUB_ENV
+      - name: Create update.json
+        run: |
+          python3 - <<'PY' > update.json
+          import json, os, subprocess
+          notes = subprocess.check_output(["git", "log", "-1", "--pretty=%s"], text=True).strip()
+          data = {
+            "versionCode": int(os.environ["VERSION_CODE"]),
+            "versionName": os.environ["VERSION_NAME"],
+            "apk": "IPTVPR.apk",
+            "sha256": os.environ["APK_SHA256"],
+            "minSupportedCode": 0,
+            "mandatory": false,
+            "notes": notes
+          }
+          with open("update.json", "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+          f.write("\n")
+          PY
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: ipvio-stream-debug
-          path: app/build/outputs/apk/debug/*.apk
+          name: iptvpr-debug
+          path: IPTVPR.apk
+      - name: Create GitHub Release
+        run: |
+          NOTES=$(git log -1 --pretty=%s)
+          gh release delete "v${VERSION_NAME}" -y 2>/dev/null || true
+          gh release create "v${VERSION_NAME}" \
+            --title "IPTVPR ${VERSION_NAME}" \
+            --notes "${NOTES}" \
+            IPTVPR.apk update.json

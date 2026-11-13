@@ -17,4 +17,4 @@ Free, open-source (GPL-3.0) IPTV player for Android TV / Google TV / Fire TV. Xt
 
 ## Update
 1.0 users install 1.1 once manually (Downloader code or link). From 1.1 on the app updates itself.
-Download: https://github.com/Emrodev/IPVIO-Stream/releases/latest/download/IPVIO-Stream.apk
+Download: https://github.com/baskettv23/IPTVPR/releases/latest/download/IPTVPR.apk

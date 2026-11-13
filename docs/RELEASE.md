@@ -41,25 +41,25 @@ Users of an APK signed with a different key have to uninstall once (Settings > S
 1. In `app/build.gradle.kts` raise `versionCode` (by 1) and `versionName` (e.g. `"1.2"`).
 2. Build the signed APK: `gradlew assembleRelease` (or Build > Generate Signed App Bundle / APK).
    The file is `app/build/outputs/apk/release/app-release.apk`.
-3. Rename it to **`IPVIO-Stream.apk`**.
+3. Rename it to **`IPTVPR.apk`**.
 4. Create `update.json` for exactly this APK (section 3).
 5. On GitHub: **Releases > Draft a new release**
    - Tag: `v` + versionName, e.g. `v1.2` (the app compares this tag with its own version)
    - Title and notes: what is new (the first lines appear in the app)
-   - Attach **both** `IPVIO-Stream.apk` and `update.json`
+   - Attach **both** `IPTVPR.apk` and `update.json`
    - **Publish release** (not "pre-release", the app ignores those)
-6. Check: open `https://github.com/Emrodev/IPVIO-Stream/releases/latest/download/update.json` in a browser. It must show your JSON.
+6. Check: open `https://github.com/baskettv23/IPTVPR/releases/latest/download/update.json` in a browser. It must show your JSON.
 
 The download link in the README and the Downloader code always point to the newest release:
-`https://github.com/Emrodev/IPVIO-Stream/releases/latest/download/IPVIO-Stream.apk`
+`https://github.com/baskettv23/IPTVPR/releases/latest/download/IPTVPR.apk`
 
 ## 3. update.json (Windows)
 
-The app downloads `https://github.com/Emrodev/IPVIO-Stream/releases/latest/download/update.json` first. It contains the
+The app downloads `https://github.com/baskettv23/IPTVPR/releases/latest/download/update.json` first. It contains the
 SHA-256 of the APK, so the app can reject a damaged download before the installer opens.
 
-1. Put the final `IPVIO-Stream.apk` in a folder, open **Command Prompt** there (type `cmd` in the folder's address bar).
-2. Run `certutil -hashfile IPVIO-Stream.apk SHA256`.
+1. Put the final `IPTVPR.apk` in a folder, open **Command Prompt** there (type `cmd` in the folder's address bar).
+2. Run `certutil -hashfile IPTVPR.apk SHA256`.
    The second line is the hash: 64 characters `0-9 a-f`. Older Windows versions print it with spaces; the app ignores spaces and upper/lower case.
 3. Create `update.json` with Notepad (save as **UTF-8**, file type "All files", name exactly `update.json`):
 
@@ -67,7 +67,7 @@ SHA-256 of the APK, so the app can reject a damaged download before the installe
 {
   "versionCode": 5,
   "versionName": "1.4",
-  "apk": "IPVIO-Stream.apk",
+  "apk": "IPTVPR.apk",
   "sha256": "PASTE-THE-64-CHARACTER-HASH-HERE",
   "minSupportedCode": 0,
   "mandatory": false,
